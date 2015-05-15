@@ -1,0 +1,15 @@
+{
+  "name": "MrAlias-sudo",
+  "version": "0.1.0",
+  "author": "Tyler Yahn <codingalias@gmail.com>",
+  "summary": "Puppet module managing the Sudo package and authorization capabilities.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/MrAlias/sudo.git",
+  "project_page": "https://github.com/MrAlias/sudo",
+  "issues_url": "https://github.com/MrAlias/sudo/issues",
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.5.1 < 5.0.0"},
+    {"name":"puppetlabs/concat","version_requirement":">= 1.2.0 < 2.0.0"}
+  ]
+}
+
