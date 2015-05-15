@@ -60,12 +60,13 @@ The above will handle correctly installing a sudoers file with the content provi
 The `sudo` class data can be defined in hiera.  In order to achieve the same result as the previous example showed, a file in your hierachy should have something like this:
 
 ```yaml
+---
+...
 sudo::defaults_content: "Customized defaults content..."
 sudo::host_aliases_content: "Customized host_aliases content..."
 sudo::user_aliases_content: "Customized user_aliases content..."
 sudo::cmnd_aliases_content: "Customized cmnd_aliases content..."
 sudo::runas_spec_content: "Customized runas_spec content..."
-}
 ```
 
 When the `sudo` class is then included in the project (via hiera or otherwise), a similar sudoers policy will be put in place.
