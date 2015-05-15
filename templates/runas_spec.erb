@@ -1,0 +1,10 @@
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+
+# Allow members of group sudo to execute any command
+<% if @osfamily == 'Debian' -%>
+%sudo   ALL=(ALL:ALL) ALL
+<% else -%>
+%wheel   ALL=(ALL:ALL) ALL
+<% end -%>
+
