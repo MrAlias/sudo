@@ -7,9 +7,6 @@
 # [*package_name*]
 #   Name of sudo package.
 #
-# [*service_name*]
-#   Name of the sudo service the module will manage.
-#
 # [*sudoers_file*]
 #   Location where the main sudoers file is located.
 #
@@ -43,7 +40,6 @@
 #
 class sudo (
   $package_name         = hiera("${module_name}::package_name", 'sudo'),
-  $service_name         = hiera("${module_name}::service_name", 'sudo'),
   $sudoers_file         = hiera("${module_name}::sudoers_file", '/etc/sudoers'),
   $include_dirs         = hiera_array("${module_name}::include_dirs", ['/etc/sudoers.d']),
   $defaults_content     = hiera("${module_name}::defaults_content", template("${module_name}/defaults.erb")),
@@ -123,14 +119,5 @@ class sudo (
       require     => Package['rkhunter'],
       subscribe   => Exec["Syntax check for ${sudoers_file}"]
     }
-  }
-
-  # Make sure privileges don't persist across reboots
-  service { 'sudo':
-    name       => $service_name,
-    enable     => true,
-    hasrestart => false,
-    hasstatus  => false,
-    require    => Package['sudo'],
   }
 }

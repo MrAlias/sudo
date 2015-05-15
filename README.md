@@ -18,7 +18,7 @@ Puppet module managing the Sudo package and all it's authorization capabilities.
 
 ## Module Description
 
-This module attempts to provide basic management of the Sudo package and service and extended customizability of its configuration.  The module's intent is to supports declaration of data by traditional manifests as well as via hiera.
+This module attempts to provide basic management of the Sudo package and extended customizability of its configuration.  The module's intent is to supports declaration of data by traditional manifests as well as via hiera.
 
 ## Setup
 
@@ -27,7 +27,6 @@ This module attempts to provide basic management of the Sudo package and service
 * The sudo package.
 * The main sudo configuration file (*/etc/sudoers*).
 * The rkhunter database if the rkhunter package is installed.
-* The sudo service.
 
 ### Beginning with sudo
 
@@ -82,10 +81,6 @@ Manages the Sudo package an authorization capabilities.
 ##### `package_name`
 
 Name of sudo package the module will install.
-
-##### `service_name`
-
-Name of the sudo service the module will manage.
 
 ##### `sudoers_file`
 
