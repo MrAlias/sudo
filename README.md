@@ -56,7 +56,7 @@ The above will handle correctly installing a sudoers file with the content provi
 
 ### Providing custom configuration in hiera.
 
-The `sudo` class data can be defined in hiera.  In order to achieve the same result as the previous example showed, a file in your hierachy should have something like this:
+The `sudo` class data can be defined in hiera.  In order to achieve the same result as the previous example showed, a file in your hierarchy should have something like this:
 
 ```yaml
 ---
@@ -76,45 +76,53 @@ When the `sudo` class is then included in the project (via hiera or otherwise), 
 
 #### sudo
 
-Manages the Sudo package an authorization capabilities.
+Manages the Sudo package and its authorization capabilities.
 
-##### `package_name`
+##### `sudo::package_name`
 
-Name of sudo package the module will install.
+(String) Name of sudo package the module will install.
 
-##### `sudoers_file`
+Default value: `'sudo'`
 
-Location where the main sudoers configuration file is located.
+##### `sudo::sudoers_file`
 
-##### `include_dirs`
+(Absolute Path) Location of the main sudoers configuration file.
 
-Array of all directories to include in the main sudoers file.  All additional files found in these directories are treated as sudo configuration files.
+Default value: `'/etc/sudoers'`
 
-##### `defaults_content`
+##### `sudo::include_dirs`
 
-The content of the main sudoers file that sets the sudo defaults.
+(Array) Directories to include in the main sudoers file.
 
-##### `host_aliases_content`
+All additional files found in these directories are treated as sudo configuration files.
 
-The content of the main sudoers file that sets the sudo host_aliases.
+Default value: `['/etc/sudoers.d']`
 
-##### `user_aliases_content`
+##### `sudo::defaults_content`
 
-The content of the main sudoers file that sets the sudo user_aliases.
+(String) Content of the defaults section of the sudoers file.
 
-##### `cmnd_aliases_content`
+##### `sudo::host_aliases_content`
 
-The content of the main sudoers file that sets the sudo cmnd_aliases.
+(String) Content of the host\_aliases section of the sudoers file.
 
-##### `runas_spec_content`
+##### `sudo::user_aliases_content`
 
-The content of the main sudoers file that sets the main sudo runas_spec.
+(String) Content of the user\_aliases section of the sudoers file.
 
-##### `update_rkhunter`
+##### `sudo::cmnd_aliases_content`
 
-Specify if rkhunter should be updated after any change is made.
+(String) Content of the cmnd\_aliases section of the sudoers file.
 
-Any changes to the sudoers policy will cause rkhunter to error.  This provides a convient way to automatically update rkhunter of changes to the sudoers policy.
+##### `sudo::runas_spec_content`
+
+(String) Content of the runas\_spec section of the sudoers file.
+
+##### `sudo::update_rkhunter`
+
+(Boolean) Specify if rkhunter should be updated after any change is made.
+
+Any changes to the sudoers policy will cause rkhunter to error.  This provides a convenient way to automatically update rkhunter of changes to the sudoers policy.
 
 ## Limitations
 
