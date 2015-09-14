@@ -110,6 +110,12 @@ The content of the main sudoers file that sets the sudo cmnd_aliases.
 
 The content of the main sudoers file that sets the main sudo runas_spec.
 
+##### `update_rkhunter`
+
+Specify if rkhunter should be updated after any change is made.
+
+Any changes to the sudoers policy will cause rkhunter to error.  This provides a convient way to automatically update rkhunter of changes to the sudoers policy.
+
 ## Limitations
 
 This module has received limited testing on Debian based operating systems and CentOS 7.0.

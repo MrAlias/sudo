@@ -1,11 +1,11 @@
 # == Class: sudo
 #
-# Manages the Sudo package an authorization capabilities.
+# Manages the Sudo package and authorization capabilities.
 #
 # === Parameters
 #
 # [*package_name*]
-#   Name of sudo package.
+#   Name of sudo package to install.
 #
 # [*sudoers_file*]
 #   Location where the main sudoers file is located.
@@ -30,9 +30,21 @@
 # [*runas_spec_content*]
 #   The content of the main sudoers file that sets the main sudo runas_spec.
 #
+# [*update_rkhunter*]
+#   Specify if rkhunter should be updated after any change is made.
+#
+#   Any changes to the sudoers policy will cause rkhunter to error.  This
+#   provides a convient way to automatically update rkhunter of changes
+#   to the sudoers policy.
+#
 # === Examples
 #
-#  class { 'sudo': }
+#  class { 'sudo':
+#    sudoers_file         => '/root/sudoers',
+#    include_dirs         => ['/root/sudoers.d'],
+#    defaults_content     => "Defaults	env_reset",
+#    runas_spec_content   => "root	ALL=(ALL:ALL) ALL",
+#  }
 #
 # === Authors
 #
@@ -47,6 +59,7 @@ class sudo (
   $user_aliases_content = hiera("${module_name}::user_aliases_content", template("${module_name}/user_aliases.erb")),
   $cmnd_aliases_content = hiera("${module_name}::cmnd_aliases_content", template("${module_name}/cmnd_aliases.erb")),
   $runas_spec_content   = hiera("${module_name}::runas_spec_content", template("${module_name}/runas_spec.erb")),
+  $update_rkhunter      = hiera("${module_name}::update_rkhunter", true),
 ) {
   ensure_packages('sudo', {'name' => $package_name})
 
@@ -110,8 +123,7 @@ class sudo (
     ],
   }
 
-  # Ensure any changes to sudoers is noted by rkhunter if installed.
-  if defined(Package['rkhunter']) {
+  if $update_rkhunter:
     exec { 'rkhunter-propupd sudo':
       command     => '/usr/bin/rkhunter --propupd sudo',
       refreshonly => true,
