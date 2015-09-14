@@ -1,7 +1,17 @@
 require 'spec_helper'
-describe 'sudo' do
 
+fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
+
+describe 'sudo', :type => 'class' do
   context 'with defaults for all parameters' do
-    it { should contain_class('sudo') }
+    let(:facts) {
+      {:concat_basedir => File.join(fixture_path, 'concat_basedir')}
+    }
+
+    it {
+      should compile.with_all_deps
+      should contain_class('sudo')
+      should contain_package('sudo')
+    }
   end
 end
