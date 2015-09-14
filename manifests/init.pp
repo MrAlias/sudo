@@ -61,6 +61,21 @@ class sudo (
   $runas_spec_content   = hiera("${module_name}::runas_spec_content", template("${module_name}/runas_spec.erb")),
   $update_rkhunter      = hiera("${module_name}::update_rkhunter", false),
 ) {
+  validate_absolute_path($sudoers_file)
+
+  validate_array($include_dirs)
+
+  validate_string(
+    $package_name,
+    $defaults_content,
+    $host_aliases_content,
+    $user_aliases_content,
+    $cmnd_aliases_content,
+    $runas_spec_content,
+  )
+
+  validate_bool($update_rkhunter)
+
   ensure_packages('sudo', {'name' => $package_name})
 
   # Construct the main sudoers file in parts.
