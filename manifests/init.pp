@@ -59,7 +59,7 @@ class sudo (
   $user_aliases_content = hiera("${module_name}::user_aliases_content", template("${module_name}/user_aliases.erb")),
   $cmnd_aliases_content = hiera("${module_name}::cmnd_aliases_content", template("${module_name}/cmnd_aliases.erb")),
   $runas_spec_content   = hiera("${module_name}::runas_spec_content", template("${module_name}/runas_spec.erb")),
-  $update_rkhunter      = hiera("${module_name}::update_rkhunter", true),
+  $update_rkhunter      = hiera("${module_name}::update_rkhunter", false),
 ) {
   ensure_packages('sudo', {'name' => $package_name})
 
@@ -123,12 +123,11 @@ class sudo (
     ],
   }
 
-  if $update_rkhunter:
+  if $update_rkhunter {
     exec { 'rkhunter-propupd sudo':
       command     => '/usr/bin/rkhunter --propupd sudo',
       refreshonly => true,
       timeout     => 3600,
-      require     => Package['rkhunter'],
       subscribe   => Exec["Syntax check for ${sudoers_file}"]
     }
   }
