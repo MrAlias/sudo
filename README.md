@@ -124,6 +124,8 @@ Default value: `['/etc/sudoers.d']`
 
 Any changes to the sudoers policy will cause rkhunter to error.  This provides a convenient way to automatically update rkhunter of changes to the sudoers policy.
 
+Default value: `false`
+
 ## Limitations
 
 This module has received limited testing on Debian based operating systems and CentOS 7.0.
