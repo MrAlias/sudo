@@ -2,23 +2,18 @@
 
 #### Table of Contents
 
-1. [Overview](#overview)
-2. [Module Description](#module-description)
-3. [Setup](#setup)
+1. [Module Description](#module-description)
+2. [Setup](#setup)
     * [What sudo affects](#what-sudo-affects)
     * [Beginning with sudo](#beginning-with-sudo)
-4. [Usage](#usage)
-5. [Reference](#reference)
+3. [Usage](#usage)
+4. [Reference](#reference)
     * [Classes](#classes)
-6. [Limitations](#limitations)
-
-## Overview
-
-Puppet module managing the Sudo package and all it's authorization capabilities.
+5. [Limitations](#limitations)
 
 ## Module Description
 
-This module attempts to provide basic management of the Sudo package and extended customizability of its configuration.  The module's intent is to supports declaration of data by traditional manifests as well as via hiera.
+[Sudo](http://www.sudo.ws) is powerful tool used to manage extending users privileges.  This module is intended to offer extended customizability of sudo configuration in order to fully leverage its use.
 
 ## Setup
 
@@ -26,11 +21,11 @@ This module attempts to provide basic management of the Sudo package and extende
 
 * The sudo package.
 * The main sudo configuration file (*/etc/sudoers*).
-* The rkhunter database if the rkhunter package is installed.
+* Potentially the rkhunter database if the rkhunter package is installed.
 
 ### Beginning with sudo
 
-To provide a basic setup all that is needed is something like this:
+To install sudo with a basic configuration:
 
 ```puppet
 include sudo
@@ -40,35 +35,84 @@ include sudo
 
 ### Providing custom configuration.
 
-The `sudo` class can be declared with all the customized configuration options your project needs:
+The `sudo` class is the main class of the module and is where all configuration is done.
 
 ```puppet
 class { 'sudo':
-  defaults_content     => "Customized defaults content...",
-  host_aliases_content => "Customized host_aliases content...",
-  user_aliases_content => "Customized user_aliases content...",
-  cmnd_aliases_content => "Customized cmnd_aliases content...",
-  runas_spec_content   => "Customized runas_spec content...",
+  defaults_content     => 'Defaults	editor=/usr/bin/vim env_reset mail_badpass noexec',
+  host_aliases_content => 'Host_Alias	SANS = backup1, backup2,
+  user_aliases_content => 'User_Alias	PEONS = jim, joe, jack',
+  cmnd_aliases_content => 'Cmnd_Alias	BACKUP = /bin/tar, /bin/cpio, /bin/mount',
+  runas_spec_content   => 'PEONS	SANS = (admin) EXEC: BACKUP',
 }
 ```
 
-The above will handle correctly installing a sudoers file with the content provided.  If your content is incorrect syntax, the module will remove the sudoers file instead of installing a broken sudoers policy.
+Of course if you need to add more complex content you can pass in a file or template output.
 
-### Providing custom configuration in hiera.
+If the content of the created policy contains invalid syntax the module will remove the configuration file instead of installing a broken sudoers policy.
 
-The `sudo` class data can be defined in hiera.  In order to achieve the same result as the previous example showed, a file in your hierarchy should have something like this:
+### Including your own custom files
+
+If passing content to the main sudoers policy is not enough to achieve the desired configuration, you can directly manage the configuration files and just include them in the main policy.
+
+```puppet
+file { '/home/me/my_policies':
+  ensure => directory,
+}
+
+file { '/home/me/my_policies/polity1':
+  ensure  => file,
+  content => tempate('/path/to/templates/polity1'),
+  requre  => File['/home/me/my_policies'],
+}
+
+file { '/home/me/my_policies/policy2':
+  ensure  => file,
+  content => template('/path/to/templates/policy2'),
+  requre  => File['/home/me/my_policies'],
+}
+
+class { 'sudo':
+  include_dirs => ['/etc/sudoers.d', '/home/me/my_policies']
+  requre       => File['/home/me/my_policies'],
+}
+```
+
+### Configuring with Hiera
+
+The `sudo` class was designed with the intent that hiera would be used in parameter definition.  If merging is enabled even more specific policy can be generated. Given a hierarchy like the following defined in `hiera.yaml`:
 
 ```yaml
 ---
-...
-sudo::defaults_content: "Customized defaults content..."
-sudo::host_aliases_content: "Customized host_aliases content..."
-sudo::user_aliases_content: "Customized user_aliases content..."
-sudo::cmnd_aliases_content: "Customized cmnd_aliases content..."
-sudo::runas_spec_content: "Customized runas_spec content..."
+:backends:
+  - yaml
+:hierarchy:
+  - "role/%{::role}"
+  - common
+:yaml:
+   :datadir: /etc/puppet/hieradata
+:merge_behavior: deeper
 ```
 
-When the `sudo` class is then included in the project (via hiera or otherwise), a similar sudoers policy will be put in place.
+A base configuration can be established in `common.yaml`:
+
+```yaml
+# common.yaml
+---
+sudo::defaults_content: 'Defaults	editor=/usr/bin/vim env_reset mail_badpass noexec',
+sudo::host_aliases_content: 'Host_Alias	SANS = backup1, backup2,
+sudo::user_aliases_content: 'User_Alias	PEONS = jim, joe, jack',
+sudo::cmnd_aliases_content: 'Cmnd_Alias	BACKUP = /bin/tar, /bin/cpio, /bin/mount',
+sudo::runas_spec_content: 'PEONS	SANS = (admin) EXEC: BACKUP',
+```
+
+Now if you want you the new guy, albert, to be able to only work on the demo servers:
+
+```yaml
+# role/demo.yaml
+---
+sudo::user_aliases_content: 'User_Alias	PEONS = jim, joe, jack, albert',
+```
 
 ## Reference
 
