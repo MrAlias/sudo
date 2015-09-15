@@ -1,5 +1,7 @@
 # sudo
 
+**Notice**: This module is still a work in progress.  I do not recommend production use until this notice is removed.
+
 #### Table of Contents
 
 1. [Module Description](#module-description)
