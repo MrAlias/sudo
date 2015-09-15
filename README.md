@@ -106,7 +106,7 @@ sudo::cmnd_aliases_content: 'Cmnd_Alias	BACKUP = /bin/tar, /bin/cpio, /bin/mount
 sudo::runas_spec_content: 'PEONS	SANS = (admin) EXEC: BACKUP',
 ```
 
-Now if you want you the new guy, albert, to be able to only work on the demo servers:
+Now if you want you the new guy, Albert, to be able to only work on the demo servers:
 
 ```yaml
 # role/demo.yaml
