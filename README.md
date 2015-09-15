@@ -100,7 +100,7 @@ A base configuration can be established in `common.yaml`:
 # common.yaml
 ---
 sudo::defaults_content: 'Defaults	editor=/usr/bin/vim env_reset mail_badpass noexec',
-sudo::host_aliases_content: 'Host_Alias	SANS = backup1, backup2,
+sudo::host_aliases_content: 'Host_Alias	SANS = backup1, backup2',
 sudo::user_aliases_content: 'User_Alias	PEONS = jim, joe, jack',
 sudo::cmnd_aliases_content: 'Cmnd_Alias	BACKUP = /bin/tar, /bin/cpio, /bin/mount',
 sudo::runas_spec_content: 'PEONS	SANS = (admin) EXEC: BACKUP',
