@@ -80,12 +80,13 @@ class sudo (
 
   # Construct the main sudoers file in parts.
   concat { $sudoers_file:
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0440',
-    warn    => true,
-    require => Package['sudo'],
+    ensure         => present,
+    owner          => 'root',
+    group          => 'root',
+    mode           => '0440',
+    warn           => true,
+    ensure_newline => true,
+    require        => Package['sudo'],
   }
 
   Concat::Fragment {
