@@ -114,6 +114,17 @@ Now if you want you the new guy, albert, to be able to only work on the demo ser
 sudo::user_aliases_content: 'User_Alias	PEONS = jim, joe, jack, albert',
 ```
 
+### Integration with rkhunter
+
+[Rkhunter](http://rkhunter.sourceforge.net) is a great tool to help monitor system security.  It will, however, error if you update the sudoers policy without notifying it of the change.  This module does that for you if you say to:
+
+```puppet
+class { 'sudo':
+  runas_spec_content => '%sudo	ALL = (ALL:ALL) ALL',
+  update_rkhunter    => true,
+}
+```
+
 ## Reference
 
 ### Classes
