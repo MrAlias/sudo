@@ -55,28 +55,21 @@ If the content of the created policy contains invalid syntax the module will rem
 
 ### Including your own custom files
 
-If passing content to the main sudoers policy is not enough to achieve the desired configuration, you can directly manage the configuration files and just include them in the main policy.
+If passing content to the main sudoers policy is not flexible enough to achieve the desired configuration, you can directly manage the configuration files and just include them in the main policy.
 
 ```puppet
-file { '/home/me/my_policies':
-  ensure => directory,
-}
-
 file { '/home/me/my_policies/polity1':
   ensure  => file,
   content => tempate('/path/to/templates/polity1'),
-  requre  => File['/home/me/my_policies'],
 }
 
 file { '/home/me/my_policies/policy2':
   ensure  => file,
   content => template('/path/to/templates/policy2'),
-  requre  => File['/home/me/my_policies'],
 }
 
 class { 'sudo':
-  include_dirs => ['/etc/sudoers.d', '/home/me/my_policies']
-  requre       => File['/home/me/my_policies'],
+  include => ['/home/me/my_policies/polity1', '/home/me/my_policies/polity2']
 }
 ```
 
@@ -146,6 +139,20 @@ Default value: `'sudo'`
 (Absolute Path) Location of the main sudoers configuration file.
 
 Default value: `'/etc/sudoers'`
+
+##### `sudo::include`
+
+(Array) File paths to include in the sudoers policy.
+
+Default value: `[]`
+
+##### `sudo::include_dir`
+
+(String) Absolute path to directory for system package policies.
+
+This ensures the directory is specifies in the main policy to be included as the place where the system package manager can drop sudoers rules into as part of the package installation.
+
+Default value: `'/etc/sudoers.d'`
 
 ##### `sudo::include_dirs`
 

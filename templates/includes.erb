@@ -1,0 +1,10 @@
+
+# See sudoers(5) for more information on "#include" directives:
+<% @include.each do |file| -%>
+#include <%= file %>
+<% end -%>
+
+<% if @include_dir and @include_dir != '' and @include_dir != [] -%>
+#includedir <%= @include_dir %>
+
+<% end -%>

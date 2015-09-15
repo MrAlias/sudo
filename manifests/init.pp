@@ -10,10 +10,15 @@
 # [*sudoers_file*]
 #   Location where the main sudoers file is located.
 #
-# [*include_dirs*]
-#   Array of all directories to include in the main sudoers file.  All
-#   additional files found in these directories are treated as sudo config
-#   files.
+# [*include*]
+#   Array of files to include in policy.
+#
+# [*include_dir*]
+#   Absolute path to directory for system package policies.
+#
+#   This ensures the directory is specifies in the main policy to be
+#   included as the place where the system package manager can drop sudoers
+#   rules into as part of the package installation.
 #
 # [*defaults_content*]
 #   The content of the main sudoers file that sets the sudo defaults.
@@ -34,14 +39,15 @@
 #   Specify if rkhunter should be updated after any change is made.
 #
 #   Any changes to the sudoers policy will cause rkhunter to error.  This
-#   provides a convient way to automatically update rkhunter of changes
+#   provides a convenient way to automatically update rkhunter of changes
 #   to the sudoers policy.
 #
 # === Examples
 #
 #  class { 'sudo':
 #    sudoers_file         => '/root/sudoers',
-#    include_dirs         => ['/root/sudoers.d'],
+#    include              => ['/home/me/my.policy]',
+#    include_dir          => '/root/sudoers.d',
 #    defaults_content     => "Defaults	env_reset",
 #    runas_spec_content   => "root	ALL=(ALL:ALL) ALL",
 #  }
@@ -53,7 +59,8 @@
 class sudo (
   $package_name         = hiera("${module_name}::package_name", 'sudo'),
   $sudoers_file         = hiera("${module_name}::sudoers_file", '/etc/sudoers'),
-  $include_dirs         = hiera_array("${module_name}::include_dirs", ['/etc/sudoers.d']),
+  $include              = hiera_array("${module_name}::include_dirs", []),
+  $include_dir          = hiera("${module_name}::include_dir", '/etc/sudoers.d'),
   $defaults_content     = hiera("${module_name}::defaults_content", template("${module_name}/defaults.erb")),
   $host_aliases_content = hiera("${module_name}::host_aliases_content", template("${module_name}/host_aliases.erb")),
   $user_aliases_content = hiera("${module_name}::user_aliases_content", template("${module_name}/user_aliases.erb")),
@@ -62,8 +69,9 @@ class sudo (
   $update_rkhunter      = hiera("${module_name}::update_rkhunter", false),
 ) {
   validate_absolute_path($sudoers_file)
+  validate_absolute_path($include_dir)
 
-  validate_array($include_dirs)
+  validate_array($include)
 
   validate_string(
     $package_name,
@@ -119,8 +127,8 @@ class sudo (
     order   => '05',
   }
 
-  concat::fragment { 'includedirs':
-    content => template("${module_name}/include_dirs.erb"),
+  concat::fragment { 'includes':
+    content => template("${module_name}/includes.erb"),
     order   => '06',
   }
 

@@ -14,7 +14,8 @@ describe 'sudo', :type => 'class' do
       {
         :package_name         => 'test_sudo',
         :sudoers_file         => '/root/sudoers',
-        :include_dirs         => ['/root/sudoers.d'],
+        :include              => ['/root/my.policy'],
+        :include_dir          => '/root/sudoers.d',
         :defaults_content     => 'test default content',
         :host_aliases_content => 'test host_aliases content',
         :user_aliases_content => 'test user_aliases content',
@@ -77,11 +78,11 @@ describe 'sudo', :type => 'class' do
           :order   => '05',
         }
       )
-      should contain_concat__fragment('includedirs').with(
+      should contain_concat__fragment('includes').with(
         {
           :ensure  => 'present',
           :target  => '/root/sudoers',
-          :content => "# See sudoers(5) for more information on \"#include\" directives:\n\n#includedir /root/sudoers.d\n\n",
+          :content => "\n# See sudoers(5) for more information on \"#include\" directives:\n#include /root/my.policy\n\n#includedir /root/sudoers.d\n\n",
           :order   => '06',
         }
       )
@@ -117,12 +118,20 @@ describe 'sudo', :type => 'class' do
     it { should compile.and_raise_error(/"\.\/root\/sudoers" is not an absolute path/) }
   end
 
-  context 'with bad include_dirs type' do
+  context 'with bad include type' do
     let(:params) do
-      { :include_dirs => './root/sudoers.d' }
+      { :include => './root/my.policy' }
     end
 
-    it { should compile.and_raise_error(/"\.\/root\/sudoers.d" is not an Array/) }
+    it { should compile.and_raise_error(/"\.\/root\/my\.policy" is not an Array/) }
+  end
+
+  context 'with bad include_dir absolute path' do
+    let(:params) do
+      { :include_dir => './root/sudoers.d' }
+    end
+
+    it { should compile.and_raise_error(/"\.\/root\/sudoers\.d" is not an absolute path/) }
   end
 
   context 'with bad defaults_content type' do
