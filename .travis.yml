@@ -36,13 +36,13 @@ matrix:
       env: PUPPET_VERSION="~> 4.0"
     - rvm: default
       services: docker
-      env: BEAKER_set="debian-6-x86_64-docker"
+      env: BEAKER_set="debian-6-x86_64_docker"
       script: bundle exec rake beaker
     - rvm: default
       services: docker
-      env: BEAKER_set="debian-7-x86_64-docker"
+      env: BEAKER_set="debian-6-x86_64_docker"
       script: bundle exec rake beaker
     - rvm: default
       services: docker
-      env: BEAKER_set="debian-8-x86_64-docker"
+      env: BEAKER_set="debian-8-x86_64_docker"
       script: bundle exec rake beaker
