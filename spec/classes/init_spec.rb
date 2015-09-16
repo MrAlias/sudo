@@ -6,6 +6,8 @@ describe 'sudo', :type => 'class' do
       should compile.with_all_deps
       should contain_class('sudo')
       should contain_package('sudo')
+      should contain_concat('/etc/sudoers')
+      should contain_exec('Syntax check for /etc/sudoers').that_subscribes_to('Concat[/etc/sudoers]')
     }
   end
 
