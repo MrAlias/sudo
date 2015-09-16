@@ -1,7 +1,6 @@
 ---
 language: ruby
 sudo: required
-cache: bundler
 before_install:
   - rm Gemfile.lock || true
   - sudo apt-get update -qq
