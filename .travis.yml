@@ -1,6 +1,6 @@
 ---
 language: ruby
-sudo: false
+sudo: required
 cache: bundler
 before_install:
   - rm Gemfile.lock || true
@@ -35,17 +35,14 @@ matrix:
     - rvm: ruby-head
       env: PUPPET_VERSION="~> 4.0"
     - rvm: default
-      sudo: required
       services: docker
       env: BEAKER_set="debian-6-x86_64-docker"
       script: bundle exec rake beaker
     - rvm: default
-      sudo: required
       services: docker
       env: BEAKER_set="debian-7-x86_64-docker"
       script: bundle exec rake beaker
     - rvm: default
-      sudo: required
       services: docker
       env: BEAKER_set="debian-8-x86_64-docker"
       script: bundle exec rake beaker
