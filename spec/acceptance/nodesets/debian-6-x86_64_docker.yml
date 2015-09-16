@@ -1,0 +1,8 @@
+HOSTS:
+  debian-6-x64:
+    platform: debian-6-amd64
+    hypervisor : docker
+    image: debian:6
+CONFIG:
+  type: foss
+  log_level: debug
