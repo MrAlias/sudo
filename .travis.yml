@@ -1,6 +1,8 @@
 ---
 language: ruby
 sudo: required
+services:
+  - docker
 before_install:
   - rm Gemfile.lock || true
   - sudo apt-get update -qq
@@ -31,15 +33,12 @@ matrix:
       env: PUPPET_VERSION="~> 4.0"
     - rvm: ruby-head
       env: PUPPET_VERSION="~> 4.0"
-    - rvm: 2.1.7
-      services: docker
+    - rvm: 2.2.2
       env: BEAKER_set="debian-6-x86_64_docker"
       script: bundle exec rake beaker
-    - rvm: 2.1.7
-      services: docker
+    - rvm: 2.2.2
       env: BEAKER_set="debian-7-x86_64_docker"
       script: bundle exec rake beaker
-    - rvm: 2.1.7
-      services: docker
+    - rvm: 2.2.2
       env: BEAKER_set="debian-8-x86_64_docker"
       script: bundle exec rake beaker
