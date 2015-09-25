@@ -31,17 +31,17 @@ matrix:
       env: PUPPET_VERSION="~> 4.0"
     - rvm: ruby-head
       env: PUPPET_VERSION="~> 4.0"
-    - rvm: 2.2.0
+    - rvm: 2.0.0
       sudo: require
       services: docker
       env: BEAKER_set="debian-6-x86_64_docker"
       script: bundle exec rake beaker
-    - rvm: 2.2.0
+    - rvm: 2.0.0
       sudo: require
       services: docker
       env: BEAKER_set="debian-7-x86_64_docker"
       script: bundle exec rake beaker
-    - rvm: 2.2.0
+    - rvm: 2.0.0
       sudo: require
       services: docker
       env: BEAKER_set="debian-8-x86_64_docker"
