@@ -1,45 +1,41 @@
 ---
-language: ruby
-sudo: required
-before_install:
-  - rm Gemfile.lock || true
-  - sudo apt-get update -qq
-  - sudo apt-get install -y build-essential
+language: 'ruby'
+sudo: 'required'
+services: 'docker'
+before_script:
+  - 'sudo service docker restart'
 script:
-  - bundle exec rake validate
-  - bundle exec rake lint
-  - bundle exec rake spec
+  - 'bundle exec rake validate'
+  - 'bundle exec rake lint'
+  - 'bundle exec rake spec'
 matrix:
   include:
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="~> 3.0"
-    - rvm: 2.0.0
-      env: PUPPET_VERSION="~> 3.2"
-    - rvm: 2.1.7
-      env: PUPPET_VERSION="~> 3.5"
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="~> 3.0" FUTURE_PARSER=yes
-    - rvm: 2.0.0
-      env: PUPPET_VERSION="~> 3.2" FUTURE_PARSER=yes
-    - rvm: 2.1.7
-      env: PUPPET_VERSION="~> 3.5" FUTURE_PARSER=yes
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="~> 4.0"
-    - rvm: 2.0.0
-      env: PUPPET_VERSION="~> 4.0"
-    - rvm: 2.1.7
-      env: PUPPET_VERSION="~> 4.0"
-    - rvm: ruby-head
-      env: PUPPET_VERSION="~> 4.0"
-    - rvm: default
-      services: docker
-      env: BEAKER_set="debian-6-x86_64_docker"
-      script: bundle exec rake beaker
-    - rvm: default
-      services: docker
-      env: BEAKER_set="debian-6-x86_64_docker"
-      script: bundle exec rake beaker
-    - rvm: default
-      services: docker
-      env: BEAKER_set="debian-8-x86_64_docker"
-      script: bundle exec rake beaker
+    - rvm: '1.9.3'
+      env: 'PUPPET_VERSION="~> 3.0"'
+    - rvm: '2.0.0'
+      env: 'PUPPET_VERSION="~> 3.2"'
+    - rvm: '2.1'
+      env: 'PUPPET_VERSION="~> 3.5"'
+    - rvm: '1.9.3'
+      env: 'PUPPET_VERSION="~> 3.0" FUTURE_PARSER=yes'
+    - rvm: '2.0.0'
+      env: 'PUPPET_VERSION="~> 3.2" FUTURE_PARSER=yes'
+    - rvm: '2.1'
+      env: 'PUPPET_VERSION="~> 3.5" FUTURE_PARSER=yes'
+    - rvm: '1.9.3'
+      env: 'PUPPET_VERSION="~> 4.0"'
+    - rvm: '2.0.0'
+      env: 'PUPPET_VERSION="~> 4.0"'
+    - rvm: '2.1'
+      env: 'PUPPET_VERSION="~> 4.0"'
+    - rvm: '2.2'
+      env: 'PUPPET_VERSION="~> 4.0"'
+    - rvm: 'default'
+      env: 'BEAKER_set="debian-6-x86_64_docker"'
+      script: 'bundle exec rake beaker'
+    - rvm: 'default'
+      env: 'BEAKER_set="debian-7-x86_64_docker"'
+      script: 'bundle exec rake beaker'
+    - rvm: 'default'
+      env: 'BEAKER_set="debian-8-x86_64_docker"'
+      script: 'bundle exec rake beaker'
