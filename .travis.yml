@@ -4,7 +4,8 @@ sudo: 'required'
 services: 'docker'
 install: 'bundle install --jobs=3 --retry=3 --path vendor/bundle/'
 before_script:
-  - 'BEAKER_DIR="$( bundle show beaker )" sed -i "5i\ \ \ \ \ \ \ \ \ \ @logger.debug(\"Container\ JSON\ #{container.json}\")" ${BEAKER_DIR}/lib/beaker/hypervisor/docker.rb'
+  - 'bundle show beaker'
+  - 'sed -i "5i\ \ \ \ \ \ \ \ \ \ @logger.debug(\"Container\ JSON\ #{container.json}\")" $( bundle show beaker )/lib/beaker/hypervisor/docker.rb'
 script:
   - 'bundle exec rake validate'
   - 'bundle exec rake lint'
