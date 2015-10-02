@@ -6,6 +6,9 @@ install: 'bundle install --jobs=3 --retry=3 --path vendor/bundle/'
 before_script:
   - 'bundle show beaker'
   - 'sed -i "86i\ \ \ \ \ \ \ \ \ \ @logger.debug(\"Container\ JSON\ #{container.json}\")" $( bundle show beaker )/lib/beaker/hypervisor/docker.rb'
+  - 'sudo iptables -t nat -nvL'
+  - 'sudo service docker restart'
+  - 'sudo iptables -t nat -nvL'
 script:
   - 'bundle exec rake validate'
   - 'bundle exec rake lint'
